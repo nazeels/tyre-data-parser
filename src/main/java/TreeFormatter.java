@@ -15,7 +15,8 @@ public class TreeFormatter {
         for (int idx = 0; idx < list.size(); idx++) {
             JSONObject jsonObjectItm = (JSONObject) list.get(idx);
             String catId = jsonObjectItm.get("cat_id").toString();
-            Tree<String> catNode = null;
+            System.out.println("==== "+ catId);
+            Tree<String> catNode;
             if (null == parentNode.getTree(catId)) {
                 catNode = parentNode.addLeaf("start", catId);
             } else {
