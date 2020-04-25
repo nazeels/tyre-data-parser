@@ -1,19 +1,24 @@
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TreeFormatter {
-    public  Tree<String> getStringTree(List list) {
+    public Tree<String> getStringTree(List list) {
         Tree<String> parentNode = new Tree<String>("start");
 
         for (int idx = 0; idx < list.size(); idx++) {
             JSONObject jsonObjectItm = (JSONObject) list.get(idx);
             String catId = jsonObjectItm.get("cat_id").toString();
             Tree<String> catNode = null;
-            if(null == parentNode.getTree(catId)) {
+            if (null == parentNode.getTree(catId)) {
                 catNode = parentNode.addLeaf("start", catId);
-            }
-            else {
+            } else {
                 catNode = parentNode.getTree(catId);
             }
             //width
@@ -21,21 +26,55 @@ public class TreeFormatter {
             String heightLabel = jsonObjectItm.get("heightLabel").toString();
             String rimLabel = jsonObjectItm.get("rimLabel").toString();
             Tree<String> widthTree = catNode.getTree(widthLabel1);
-            if( null == widthTree)
-            {
+            if (null == widthTree) {
                 Tree<String> heightTree = getHeightTree(catNode, widthLabel1, heightLabel);
                 //rimlabel
-                heightTree.addLeaf(heightLabel,rimLabel);
-            }
-            else {
+                heightTree.addLeaf(heightLabel, rimLabel);
+            } else {
                 Tree<String> heightTree = widthTree.getTree(heightLabel);
-                if(null == heightTree){
+                if (null == heightTree) {
                     heightTree = widthTree.addLeaf(heightLabel);
                 }
-                heightTree.addLeaf(heightLabel,rimLabel);
+                heightTree.addLeaf(heightLabel, rimLabel);
             }
         }
         return parentNode;
+    }
+
+    public void printFormatted(Tree<String> input) {
+        Collection<Tree<String>> widthTrees = input.getSubTrees();
+        widthTrees.forEach(itWidth -> {
+            JSONObject widthJson = this.getTemplate();
+            JSONArray widthLookup = (JSONArray) widthJson.get("lookup");
+
+            itWidth.getSubTrees().forEach(itHeight -> {
+                widthLookup.add(this.getTemplateLookupItem(itHeight.getHead(), itHeight.getHead()));
+            });
+            FileWriter fileWriter = null;
+            try {
+                fileWriter = new FileWriter("search_"+itWidth.getHead()+"_width.json");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.print(widthJson);
+            printWriter.close();
+
+        });
+    }
+
+    private JSONObject getTemplate() {
+        JSONObject obj = new JSONObject();
+        obj.put("lookup", new JSONArray());
+        obj.put("lookupId", "--replace-it---");
+        return obj;
+    }
+
+    private JSONObject getTemplateLookupItem(String key, String value) {
+        JSONObject obj = new JSONObject();
+        obj.put("key", key);
+        obj.put("value", value);
+        return obj;
     }
 
     private Tree<String> getHeightTree(Tree<String> catNode, String widthLabel1, String heightLabel) {
