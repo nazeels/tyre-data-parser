@@ -51,10 +51,19 @@ public class TreeFormatter {
                 widthLookup.add(this.getTemplateLookupItem(itHeight.getHead(), itHeight.getHead()));
                 JSONObject heightJson = this.getTemplate();
                 JSONArray heightLookup = (JSONArray) heightJson.get("lookup");
-                itHeight.getSubTrees().forEach(itRim ->{
-                    heightLookup.add(this.getTemplateLookupItem(itRim.getHead(),itRim.getHead()));
+                itHeight.getSubTrees().forEach(itRim -> {
+                    heightLookup.add(this.getTemplateLookupItem(itRim.getHead(), itRim.getHead()));
+
+                    //rim
+                    JSONObject rimJson = this.getTemplate();
+                    JSONArray rimLookup = (JSONArray) rimJson.get("lookup");
+                    itRim.getSubTrees().forEach(itLast -> {
+                        rimLookup.add(this.getTemplateLookupItem(itLast.getHead(), itLast.getHead()));
+                    });
+                    String fileNameRim = "search_" + itWidth.getHead() + "_width_" + itHeight.getHead() + "_height_" + itRim.getHead() + "_rim";
+                    generateJsonFIle(rimJson, fileNameRim);
                 });
-                String fileNameHeight = "search_" + itWidth.getHead() + "_width_145_height";
+                String fileNameHeight = "search_" + itWidth.getHead() + "_width_" + itHeight.getHead() + "_height";
                 generateJsonFIle(heightJson, fileNameHeight);
             });
 
@@ -72,7 +81,7 @@ public class TreeFormatter {
         widthJson.put("lookupId", fileNameWidth);
         FileWriter fileWriter = null;
         try {
-            fileWriter = new FileWriter(fileNameWidth+".json");
+            fileWriter = new FileWriter(fileNameWidth + ".json");
         } catch (IOException e) {
             e.printStackTrace();
         }
