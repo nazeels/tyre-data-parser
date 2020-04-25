@@ -49,24 +49,41 @@ public class TreeFormatter {
 
             itWidth.getSubTrees().forEach(itHeight -> {
                 widthLookup.add(this.getTemplateLookupItem(itHeight.getHead(), itHeight.getHead()));
+                JSONObject heightJson = this.getTemplate();
+                JSONArray heightLookup = (JSONArray) heightJson.get("lookup");
+                itHeight.getSubTrees().forEach(itRim ->{
+                    heightLookup.add(this.getTemplateLookupItem(itRim.getHead(),itRim.getHead()));
+                });
+                String fileNameHeight = "search_" + itWidth.getHead() + "_width_145_height";
+                generateJsonFIle(heightJson, fileNameHeight);
             });
-            FileWriter fileWriter = null;
-            try {
-                fileWriter = new FileWriter("search_"+itWidth.getHead()+"_width.json");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.print(widthJson);
-            printWriter.close();
+
+            generateWidthFile(itWidth, widthJson);
 
         });
+    }
+
+    private void generateWidthFile(Tree<String> itWidth, JSONObject widthJson) {
+        String fileNameWidth = "search_" + itWidth.getHead() + "_width";
+        generateJsonFIle(widthJson, fileNameWidth);
+    }
+
+    private void generateJsonFIle(JSONObject widthJson, String fileNameWidth) {
+        widthJson.put("lookupId", fileNameWidth);
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(fileNameWidth+".json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PrintWriter printWriter = new PrintWriter(fileWriter);
+        printWriter.print(widthJson);
+        printWriter.close();
     }
 
     private JSONObject getTemplate() {
         JSONObject obj = new JSONObject();
         obj.put("lookup", new JSONArray());
-        obj.put("lookupId", "--replace-it---");
         return obj;
     }
 

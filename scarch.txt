@@ -1,0 +1,18 @@
+cat>width > height > rimsize
+28> 155>70> 12,13
+28> 155>71>12,13,14
+28>156>70>12,13
+
+search_car_width
+search_car_width_145_height
+search_car_width_145_height_80_rim
+
+{
+  "lookup": [
+    {
+      "key": "13",
+      "value": "13"
+    }
+  ],
+  "lookupId": "search_car_width_145_height_80_rim"
+}
