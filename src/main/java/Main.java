@@ -20,10 +20,6 @@ public class Main {
         treeFormatter.printFormatted(parentNode);
 
 
-//        String content = FileUtils.readFileToString(new File(path + "test2_output.json"));
-
-//        assert parentNode.toString().replaceAll(" ", "").equals(content);
-//        System.out.println("parentNode = " + parentNode);
 
     }
 

@@ -79,7 +79,7 @@ public class TreeFormatter {
     }
 
     private void generateJsonFIle(JSONObject widthJson, String fileNameWidth) {
-        widthJson.put("lookupId", fileNameWidth);
+        widthJson.put("lookupKey", fileNameWidth);
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter(fileNameWidth + ".json");
