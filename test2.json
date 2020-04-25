@@ -1,0 +1,32 @@
+[
+  {
+    "cat_id": 28,
+    "widthLabel": "145",
+    "heightLabel": "80",
+    "rimLabel": "13"
+  },
+  {
+    "cat_id": 28,
+    "widthLabel": "145",
+    "heightLabel": "80",
+    "rimLabel": "14"
+  },
+  {
+    "cat_id": 28,
+    "widthLabel": "146",
+    "heightLabel": "80",
+    "rimLabel": "15"
+  },
+  {
+    "cat_id": 30,
+    "widthLabel": "155",
+    "heightLabel": "65",
+    "rimLabel": "15"
+  },
+  {
+    "cat_id": 30,
+    "widthLabel": "155",
+    "heightLabel": "65",
+    "rimLabel": "16"
+  }
+]
