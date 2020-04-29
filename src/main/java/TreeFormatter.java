@@ -24,19 +24,19 @@ public class TreeFormatter {
             }
             //width
             String widthLabel1 = jsonObjectItm.get("widthLabel").toString();
-            String heightLabel = jsonObjectItm.get("heightLabel").toString();
+            String heightLabel = widthLabel1 + jsonObjectItm.get("heightLabel").toString();
             String rimLabel = jsonObjectItm.get("rimLabel").toString();
             Tree<String> widthTree = catNode.getTree(widthLabel1);
             if (null == widthTree) {
-                Tree<String> heightTree = getHeightTree(catNode, widthLabel1, heightLabel);
+                Tree<String> heightTree = catNode.addLeaf(widthLabel1, heightLabel);
                 //rimlabel
-                heightTree.addLeaf(heightLabel, rimLabel);
+                heightTree.addLeaf( heightLabel,  rimLabel);
             } else {
                 Tree<String> heightTree = widthTree.getTree(heightLabel);
                 if (null == heightTree) {
-                    heightTree = widthTree.addLeaf(heightLabel);
+                    heightTree = widthTree.addLeaf( heightLabel);
                 }
-                heightTree.addLeaf(heightLabel, rimLabel);
+                heightTree.addLeaf( heightLabel, rimLabel);
             }
         }
         return parentNode;
@@ -53,7 +53,7 @@ public class TreeFormatter {
                 JSONObject heightJson = this.getTemplate();
                 JSONArray heightLookup = (JSONArray) heightJson.get("lookup");
                 itHeight.getSubTrees().forEach(itRim -> {
-                    heightLookup.add(this.getTemplateLookupItem(itRim.getHead(), itRim.getHead()));
+                    heightLookup.add(this.getTemplateLookupItem(itRim.getHead().replaceAll(itHeight.getHead(),""), itRim.getHead().replaceAll(itHeight.getHead(),"")));
 
                     //rim
                     JSONObject rimJson = this.getTemplate();
@@ -61,7 +61,7 @@ public class TreeFormatter {
                     itRim.getSubTrees().forEach(itLast -> {
                         rimLookup.add(this.getTemplateLookupItem(itLast.getHead(), itLast.getHead()));
                     });
-                    String fileNameRim = "search_" + itWidth.getHead() + "_width_" + itHeight.getHead() + "_height_" + itRim.getHead() + "_rim";
+                    String fileNameRim = "search_" + itWidth.getHead() + "_width_" + itHeight.getHead() + "_height_" + itRim.getHead().replaceAll(itHeight.getHead(),"") + "_rim";
                     generateJsonFIle(rimJson, fileNameRim);
                 });
                 String fileNameHeight = "search_" + itWidth.getHead() + "_width_" + itHeight.getHead() + "_height";
@@ -104,7 +104,7 @@ public class TreeFormatter {
         return obj;
     }
 
-    private Tree<String> getHeightTree(Tree<String> catNode, String widthLabel1, String heightLabel) {
-        return catNode.addLeaf(widthLabel1, heightLabel);
-    }
+//    private Tree<String> getHeightTree(Tree<String> catNode, String widthLabel1, String heightLabel) {
+//        return catNode.addLeaf(widthLabel1, heightLabel);
+//    }
 }
